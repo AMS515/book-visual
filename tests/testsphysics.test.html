@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>اختبارات محرك الفيزياء — الفصل الرابع</title>
+  <style>
+    body { font-family: 'Cairo', sans-serif; background: #f7f4eb; color: #1e242b; padding: 24px; }
+    .pass { color: #157347; font-weight: bold; }
+    .fail { color: #b02a37; font-weight: bold; }
+    li { margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+  <h1>اختبارات التحقق من معادلات الكتاب (Stage 2)</h1>
+  <ul id="results"></ul>
+
+  <script type="module">
+    import dipoleMod from '../js/physics/ch4_p8_q1_dipole_generation.js';
+
+    const resultsEl = document.getElementById('results');
+    function assert(title, condition) {
+      const li = document.createElement('li');
+      li.className = condition ? 'pass' : 'fail';
+      li.textContent = `${condition ? '✓ نجاح' : '✗ فشل'}: ${title}`;
+      resultsEl.appendChild(li);
+    }
+
+    // Test 1: Wavelength calculation lambda = c / f (f = 150 MHz -> lambda = 2.00 m)
+    const out1 = dipoleMod.solve({ frequencyMHz: 150, phaseDeg: 45, emfMax: 12 });
+    assert('حساب الطول الموجي (λ = c/f) عند 150 MHz يساوي 2.00 m', Math.abs(out1.wavelengthM - 2.0) < 1e-6);
+
+    // Test 2: Stage 02 (phase = 90 deg) -> maximum emf and charge velocity = 0 at rod tips
+    const out2 = dipoleMod.solve({ frequencyMHz: 150, phaseDeg: 90, emfMax: 12 });
+    assert('المرحلة 02 (θ = 90°): القوة الدافعة تبلغ قيمتها العظمى (12 V) وسرعة الشحنات عند الطرفين = 0',
+      out2.currentStageCode === '02' && Math.abs(out2.emfInstantV - 12) < 1e-6 && Math.abs(out2.chargeVelNorm) < 1e-6
+    );
+
+    // Test 3: Stage 03 (phase = 160 deg) -> decreasing emf and converging lines
+    const out3 = dipoleMod.solve({ frequencyMHz: 150, phaseDeg: 160, emfMax: 12 });
+    assert('المرحلة 03 (θ = 160°): تناقص الفولطية وتقارب نهايتي خطوط المجال', out3.currentStageCode === '03');
+
+    // Test 4: Stage 04 (phase = 215 deg) -> polarity reversal and B-field outward
+    const out4 = dipoleMod.solve({ frequencyMHz: 150, phaseDeg: 215, emfMax: 12 });
+    assert('المرحلة 04 (θ = 215°): انقلاب القطبية وانعكاس المجال المغناطيسي نحو الخارج',
+      out4.currentStageCode === '04' && out4.polaritySign === -1
+    );
+  </script>
+</body>
+</html>

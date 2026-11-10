@@ -1,0 +1,134 @@
+{
+  "bookMeta": {
+    "title": "الفيزياء للسادس العلمي — الفصل الرابع: الموجات الكهرومغناطيسية",
+    "author": "الأستاذ عبد الله الغانم",
+    "direction": "rtl",
+    "totalSequentialPages": 10,
+    "pages": [
+      { "seqPage": 1, "printedPage": 1, "title": "غلاف الفصل الرابع: الموجات الكهرومغناطيسية", "rawFile": "1000128468.webp" },
+      { "seqPage": 2, "printedPage": 4, "title": "استنتاج ماكسويل وتوليد المجال المغناطيسي من مجال كهربائي متغير", "rawFile": "1000128473.webp" },
+      { "seqPage": 3, "printedPage": 5, "title": "تيار الإزاحة وخصائص الموجات الكهرومغناطيسية", "rawFile": "1000128476.webp" },
+      { "seqPage": 4, "printedPage": 6, "title": "الشحنات المعجلة وتجربة العالم هرتز (Hertz)", "rawFile": "1000128475.webp" },
+      { "seqPage": 5, "printedPage": 7, "title": "شروط الحصول على الشرارة في جهاز هرتز وأسئلة وزارية", "rawFile": "1000128477.webp" },
+      { "seqPage": 6, "printedPage": 8, "title": "كيفية توليد الموجات الكهرومغناطيسية (المراحل 01، 02، 03)", "rawFile": "1000128478.webp" },
+      { "seqPage": 7, "printedPage": 9, "title": "انفصال حلقات المجال الكهرومغناطيسي لحظة انقلاب القطبية (04)", "rawFile": "1000128479.webp" },
+      { "seqPage": 8, "printedPage": 11, "title": "الهوائي الديبول نصف الموجي وتوزيع الفولطية والتيار", "rawFile": "1000128467.webp" },
+      { "seqPage": 9, "printedPage": 12, "title": "شرط أعظم طاقة للإرسال والفائدة العملية من تأريض الهوائي", "rawFile": "1000128469.webp" },
+      { "seqPage": 10, "printedPage": 13, "title": "مقارنة الهوائي النصف موجي والربع موجي وقوانين حساب طول الهوائي", "rawFile": "1000128471.webp" }
+    ]
+  },
+  "questions": [
+    {
+      "id": "ch4_p4_q1_maxwell_wave",
+      "source": {
+        "seqPage": 2,
+        "printedPage": 4,
+        "questionNumber": 1,
+        "printedTitle": "ما هو استنتاج ماكسويل؟"
+      },
+      "hotspot": {
+        "seqPage": 2,
+        "printedPage": 4,
+        "rect": { "x": 0.51, "y": 0.11, "w": 0.43, "h": 0.15 }
+      }
+    },
+    {
+      "id": "ch4_p4_q4_displacement_current",
+      "source": {
+        "seqPage": 2,
+        "printedPage": 4,
+        "questionNumber": 4,
+        "printedTitle": "وضح كيفية توليد مجال مغناطيسي متغير من مجال كهربائي متغير؟"
+      },
+      "hotspot": {
+        "seqPage": 2,
+        "printedPage": 4,
+        "rect": { "x": 0.06, "y": 0.59, "w": 0.43, "h": 0.32 }
+      }
+    },
+    {
+      "id": "ch4_p6_q3_hertz_spark",
+      "source": {
+        "seqPage": 4,
+        "printedPage": 6,
+        "questionNumber": 3,
+        "printedTitle": "كيف تمكن العالم هرتز من توليد الموجات الكهرومغناطيسية؟"
+      },
+      "hotspot": {
+        "seqPage": 4,
+        "printedPage": 6,
+        "rect": { "x": 0.05, "y": 0.56, "w": 0.90, "h": 0.39 }
+      }
+    },
+    {
+      "id": "ch4_p8_q1_dipole_generation",
+      "source": {
+        "seqPage": 6,
+        "printedPage": 8,
+        "questionNumber": 1,
+        "printedTitle": "وضح كيفية توليد الموجات الكهرومغناطيسية؟ (المراحل 01 - 03)"
+      },
+      "hotspot": {
+        "seqPage": 6,
+        "printedPage": 8,
+        "rect": { "x": 0.49, "y": 0.13, "w": 0.44, "h": 0.80 }
+      }
+    },
+    {
+      "id": "ch4_p9_q1_dipole_detachment",
+      "source": {
+        "seqPage": 7,
+        "printedPage": 9,
+        "questionNumber": 1,
+        "printedTitle": "شكل (يوضح انفصال خطوط المجال الكهربائي عن الهوائي لحظة انقلاب الفولطية)"
+      },
+      "hotspot": {
+        "seqPage": 7,
+        "printedPage": 9,
+        "rect": { "x": 0.06, "y": 0.08, "w": 0.44, "h": 0.33 }
+      }
+    },
+    {
+      "id": "ch4_p11_q1_halfwave_dipole",
+      "source": {
+        "seqPage": 8,
+        "printedPage": 11,
+        "questionNumber": 1,
+        "printedTitle": "مم يتكون الهوائي ؟ ارسم مخطط يوضح كيفية توزيع الفولطية والتيار على طول سلكي الهوائي."
+      },
+      "hotspot": {
+        "seqPage": 8,
+        "printedPage": 11,
+        "rect": { "x": 0.58, "y": 0.23, "w": 0.36, "h": 0.21 }
+      }
+    },
+    {
+      "id": "ch4_p12_q2_grounded_monopole",
+      "source": {
+        "seqPage": 9,
+        "printedPage": 12,
+        "questionNumber": 2,
+        "printedTitle": "ما الفائدة العملية من تأريض احد أقطاب الهوائي في عملية إرسال وتسلم الموجات الكهرومغناطيسية ؟"
+      },
+      "hotspot": {
+        "seqPage": 9,
+        "printedPage": 12,
+        "rect": { "x": 0.06, "y": 0.71, "w": 0.88, "h": 0.21 }
+      }
+    },
+    {
+      "id": "ch4_p13_q2_antenna_resonance_calc",
+      "source": {
+        "seqPage": 10,
+        "printedPage": 13,
+        "questionNumber": 2,
+        "printedTitle": "قارن بين الهوائي نصف الموجي والهوائي ربع الموجي + حساب طول الهوائي"
+      },
+      "hotspot": {
+        "seqPage": 10,
+        "printedPage": 13,
+        "rect": { "x": 0.06, "y": 0.69, "w": 0.88, "h": 0.20 }
+      }
+    }
+  ]
+}

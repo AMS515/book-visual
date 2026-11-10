@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>الفيزياء للسادس العلمي — الفصل الرابع: الموجات الكهرومغناطيسية (كتاب تفاعلي 3D)</title>
+
+  <!-- Arabic Fonts: Cairo for UI, Amiri for printed labels -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- KaTeX pinned from jsDelivr CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="./css/app.css" />
+
+  <!-- Pinned Three.js 0.160.0 Import Map -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <!-- Main 3D Canvas Viewport -->
+  <div id="viewport-container" aria-label="عرض الكتاب التفاعلي ثلاثي الأبعاد">
+    <canvas id="book-canvas"></canvas>
+
+    <!-- Overlay layer for subtle RTL hotspots ("تفاعل") & on-page switches -->
+    <div id="hotspot-overlay" aria-live="polite"></div>
+
+    <!-- Thin Paper-Colored Loading Indicator -->
+    <div id="loading-indicator" class="loading-pill hidden" role="status">
+      <span class="spinner-dot"></span>
+      <span id="loading-text">جاري تحميل الصفحات...</span>
+    </div>
+
+    <!-- Top Focus Mode Banner & Exit Button (Used when entering a 3D Question) -->
+    <header id="focus-header" class="focus-header hidden">
+      <div class="focus-title-group">
+        <span id="focus-badge" class="focus-badge">وضع التفاعل 3D</span>
+        <h1 id="focus-question-title" class="focus-question-title"></h1>
+      </div>
+      <button id="btn-exit-focus" class="icon-btn exit-focus-btn" type="button" aria-label="إغلاق وضع التفاعل والعودة للكتاب" title="إغلاق (Esc)">
+        <span>عودة للكتاب</span>
+        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+    </header>
+
+    <!-- Live Physics Readouts Card (Active in Focus Mode) -->
+    <aside id="live-readouts" class="readouts-card hidden" aria-label="القراءات الفيزيائية الحية">
+      <div class="readouts-header">القيم الفيزيائية اللحظية</div>
+      <div id="readouts-grid" class="readouts-grid"></div>
+    </aside>
+
+    <!-- Teacher Control Drawer (Side panel on desktop, bottom sheet on mobile) -->
+    <aside id="teacher-drawer" class="teacher-drawer hidden" aria-label="لوحة تحكم الأستاذ بالمتغيرات الفيزيائية">
+      <div class="drawer-handle-bar" id="drawer-toggle-handle" title="طي / توسيع لوحة التحكم">
+        <span class="drawer-grip"></span>
+        <div class="drawer-header-row">
+          <span class="drawer-title">متغيرات الشكل التفاعلي</span>
+          <div class="drawer-header-actions">
+            <button id="btn-reset-question" class="text-pill-btn" type="button" title="إعادة المتغيرات إلى القيم الافتراضية">إعادة ضبط</button>
+            <button id="btn-collapse-drawer" class="icon-mini-btn" type="button" aria-label="طي اللوحة">▾</button>
+          </div>
+        </div>
+      </div>
+      <div id="drawer-controls-list" class="drawer-controls-list"></div>
+    </aside>
+
+    <!-- Table of Contents (قائمة الفصول والأشكال التفاعلية) Popover -->
+    <div id="toc-modal" class="toc-popover hidden" role="dialog" aria-modal="false" aria-label="قائمة الصفحات والأشكال التفاعلية">
+      <div class="toc-header">
+        <h2>الفصل الرابع: الموجات الكهرومغناطيسية</h2>
+        <button id="btn-close-toc" class="icon-mini-btn" type="button" aria-label="إغلاق القائمة">✕</button>
+      </div>
+      <div class="toc-tabs">
+        <button id="tab-toc-pages" class="toc-tab active" type="button">صفحات الكتاب (10)</button>
+        <button id="tab-toc-questions" class="toc-tab" type="button">الأشكال التفاعلية (7)</button>
+      </div>
+      <div id="toc-list-container" class="toc-list"></div>
+    </div>
+
+    <!-- Slim Translucent Bottom Control Pill -->
+    <nav id="hud-pill" class="hud-pill" aria-label="شريط أدوات الكتاب">
+      <button id="btn-toc" class="hud-btn" type="button" aria-label="قائمة الفصول والصفحات" title="قائمة الفصول">
+        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="1.8" fill="none">
+          <path d="M4 6h16M4 12h16M4 18h10"/>
+        </svg>
+        <span class="hud-btn-label">قائمة الفصول</span>
+      </button>
+
+      <div class="hud-divider"></div>
+
+      <!-- RTL Page Navigation: In an Arabic book, Next goes left, Prev goes right -->
+      <button id="btn-prev-page" class="hud-btn" type="button" aria-label="الصفحة السابقة" title="الصفحة السابقة (سهم يمين)">
+        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
+      </button>
+
+      <div id="page-indicator" class="page-indicator" title="رقم الصفحة المتسلسل (ورقمها المطبوع)">
+        <span id="page-indicator-text">صفحة 1 من 10</span>
+      </div>
+
+      <button id="btn-next-page" class="hud-btn" type="button" aria-label="الصفحة التالية" title="الصفحة التالية (سهم يسار)">
+        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
+          <path d="M15 18l-6-6 6-6"/>
+        </svg>
+      </button>
+
+      <div class="hud-divider"></div>
+
+      <button id="btn-zoom-in" class="hud-btn" type="button" aria-label="تقريب" title="تقريب (+)">
+        <svg viewBox="0 0 24 24" width="19" height="19" stroke="currentColor" stroke-width="2" fill="none">
+          <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35M11 8v6M8 11h6"/>
+        </svg>
+      </button>
+
+      <button id="btn-zoom-out" class="hud-btn" type="button" aria-label="تبعيد" title="تبعيد (-)">
+        <svg viewBox="0 0 24 24" width="19" height="19" stroke="currentColor" stroke-width="2" fill="none">
+          <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35M8 11h6"/>
+        </svg>
+      </button>
+
+      <button id="btn-reset-view" class="hud-btn" type="button" aria-label="إعادة ضبط زاوية الكاميرا" title="إعادة ضبط المنظر (R)">
+        <svg viewBox="0 0 24 24" width="19" height="19" stroke="currentColor" stroke-width="1.9" fill="none">
+          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>
+        </svg>
+      </button>
+
+      <button id="btn-fullscreen" class="hud-btn" type="button" aria-label="ملء الشاشة" title="ملء الشاشة">
+        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="1.9" fill="none">
+          <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+        </svg>
+      </button>
+
+      <button id="btn-reduced-motion" class="hud-btn" type="button" aria-pressed="false" aria-label="تبديل تقليل الحركة" title="تقليل الحركة">
+        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="1.9" fill="none">
+          <circle cx="12" cy="12" r="9"/><path d="M10 9v6M14 9v6"/>
+        </svg>
+      </button>
+    </nav>
+
+    <!-- WebGL Error / Context Loss Banner -->
+    <div id="webgl-alert" class="webgl-alert hidden" role="alert">
+      <div class="webgl-alert-box">
+        <h3 id="webgl-alert-title">تنبيه الرسوميات ثلاثية الأبعاد</h3>
+        <p id="webgl-alert-desc">حدث انقطاع مؤقت في سياق WebGL أو أن المتصفح لا يدعم التسريع الرسومي.</p>
+        <button id="btn-webgl-recover" class="primary-btn" type="button">إعادة تشغيل العارض</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>
